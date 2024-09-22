@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "891859102098",
+    "project_id": "agripoa-b54d1",
+    "storage_bucket": "agripoa-b54d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891859102098:android:0f8ce931eafa95c87d394b",
+        "android_client_info": {
+          "package_name": "com.example.ratek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891859102098-3ogl7a7h21chb9lshn84jq12nr7q2tid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5dG2Ds0lUSbq1QEuTDRMXrzmCksqlyP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891859102098-3ogl7a7h21chb9lshn84jq12nr7q2tid.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "891859102098-clm30ejkcivchtk0ktr96j5lateogic7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ratek"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
