@@ -37,13 +37,13 @@ class _FarmDetailsState extends State<FarmDetails> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
-        title: Text("${farm.name}"),
+        title: Text(farm.name),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             const Text("Farm details"),
-            Container(
+            SizedBox(
               height: size.height * 0.4,
               width: double.infinity,
               child: FlutterMap(
@@ -90,27 +90,27 @@ class _FarmDetailsState extends State<FarmDetails> {
             ),
             ListTile(
               title: const Text("Zao"),
-              trailing: Text("${farm.product}"),
+              trailing: Text(farm.product),
             ),
             const Divider(thickness: 0.5),
             ListTile(
               title: const Text("Mkoa"),
-              trailing: Text("${farm.region}"),
+              trailing: Text(farm.region),
             ),
             const Divider(thickness: 0.5),
             ListTile(
               title: const Text("Wilaya"),
-              trailing: Text("${farm.district}"),
+              trailing: Text(farm.district),
             ),
             const Divider(thickness: 0.5),
             ListTile(
               title: const Text("Kata"),
-              trailing: Text("${farm.ward}"),
+              trailing: Text(farm.ward),
             ),
             const Divider(thickness: 0.5),
             ListTile(
               title: const Text("Kijiji/Mtaa"),
-              trailing: Text("${farm.village}"),
+              trailing: Text(farm.village),
             ),
             const Divider(thickness: 0.5),
             // ListTile(

@@ -74,66 +74,26 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           "Chagua shughuli yako",
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        ListTile(
+                        RadioListTile(
                           title: const Text('Mkulima'),
-                          leading: Radio<Role>(
-                            value: Role.farmer,
-                            groupValue: _role,
-                            onChanged: (Role? value) {
-                              setState(() {
-                                _role = value;
-                              });
-                            },
-                          ),
+                          value: Role.farmer,
+                          groupValue: _role,
+                          onChanged: (Role? value) {
+                            setState(() {
+                              _role = value;
+                            });
+                          },
                         ),
-                        ListTile(
+                        RadioListTile(
                           title: const Text('Ushirika'),
-                          leading: Radio<Role>(
-                            value: Role.cooperative,
-                            groupValue: _role,
-                            onChanged: (Role? value) {
-                              setState(() {
-                                _role = value;
-                              });
-                            },
-                          ),
+                          value: Role.cooperative,
+                          groupValue: _role,
+                          onChanged: (Role? value) {
+                            setState(() {
+                              _role = value;
+                            });
+                          },
                         ),
-                        // ListTile(
-                        //   title: const Text("Afisa Kilimo"),
-                        //   leading: Radio<Role>(
-                        //     value: Role.agronomist,
-                        //     groupValue: _role,
-                        //     onChanged: (Role? value) {
-                        //       setState(() {
-                        //         _role = value;
-                        //       });
-                        //     },
-                        //   ),
-                        // ),
-                        // ListTile(
-                        //   title: const Text("Muuza Pembejeo"),
-                        //   leading: Radio<Role>(
-                        //     value: Role.input,
-                        //     groupValue: _role,
-                        //     onChanged: (Role? value) {
-                        //       setState(() {
-                        //         _role = value;
-                        //       });
-                        //     },
-                        //   ),
-                        // ),
-                        // ListTile(
-                        //   title: const Text("Muuza Miche/Mbegu"),
-                        //   leading: Radio<Role>(
-                        //     value: Role.seedling,
-                        //     groupValue: _role,
-                        //     onChanged: (Role? value) {
-                        //       setState(() {
-                        //         _role = value;
-                        //       });
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

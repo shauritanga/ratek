@@ -1,7 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart' hide CarouselController;
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ratek/accordian.dart';
@@ -242,8 +242,8 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                CarouselSlider(
-                  options: CarouselOptions(
+                cs.CarouselSlider(
+                  options: cs.CarouselOptions(
                       enlargeCenterPage: true,
                       height: 190.0,
                       autoPlay: true,
@@ -345,16 +345,16 @@ class HomeScreen extends ConsumerWidget {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 16.0),
                                         child: Text(
-                                          "${farm.name}",
-                                          style: TextStyle(fontSize: 12),
+                                          farm.name,
+                                          style: const TextStyle(fontSize: 12),
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 16.0),
                                         child: Text(
-                                          "${farm.village}",
-                                          style: TextStyle(fontSize: 9),
+                                          farm.village,
+                                          style: const TextStyle(fontSize: 9),
                                         ),
                                       ),
                                     ],

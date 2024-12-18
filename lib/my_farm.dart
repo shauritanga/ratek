@@ -75,7 +75,7 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                                 child: ListView(
                                   children: [
                                     const Text("Ramani ya Shamba"),
-                                    Container(
+                                    SizedBox(
                                       height: 400,
                                       width: double.infinity,
                                       child: FlutterMap(
@@ -109,18 +109,17 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                                           PolygonLayer(
                                             polygons: [
                                               Polygon(
-                                                  points: farm.coordinates
-                                                      .map(
-                                                        (coordinate) => LatLng(
-                                                          coordinate[
-                                                              'latitude'],
-                                                          coordinate[
-                                                              'longitude'],
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                  color: Colors.redAccent,
-                                                  isFilled: true),
+                                                points: farm.coordinates
+                                                    .map(
+                                                      (coordinate) => LatLng(
+                                                        coordinate['latitude'],
+                                                        coordinate['longitude'],
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                                color: Colors.redAccent,
+                                                isFilled: true,
+                                              ),
                                             ],
                                           )
                                         ],
@@ -128,27 +127,27 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                                     ),
                                     ListTile(
                                       title: const Text("Zao"),
-                                      trailing: Text("${farm.product}"),
+                                      trailing: Text(farm.product),
                                     ),
                                     const Divider(thickness: 0.5),
                                     ListTile(
                                       title: const Text("Mkoa"),
-                                      trailing: Text("${farm.region}"),
+                                      trailing: Text(farm.region),
                                     ),
                                     const Divider(thickness: 0.5),
                                     ListTile(
                                       title: const Text("Wilaya"),
-                                      trailing: Text("${farm.district}"),
+                                      trailing: Text(farm.district),
                                     ),
                                     const Divider(thickness: 0.5),
                                     ListTile(
                                       title: const Text("Kata"),
-                                      trailing: Text("${farm.ward}"),
+                                      trailing: Text(farm.ward),
                                     ),
                                     const Divider(thickness: 0.5),
                                     ListTile(
                                       title: const Text("Kijiji/Mtaa"),
-                                      trailing: Text("${farm.village}"),
+                                      trailing: Text(farm.village),
                                     ),
                                     const Divider(thickness: 0.5),
                                     // ListTile(
@@ -172,7 +171,7 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
+                                color: Colors.grey.shade50,
                                 spreadRadius: 5,
                                 blurRadius: 7,
                                 offset: const Offset(0, 3),
@@ -198,7 +197,7 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${farm.name}",
+                                      farm.name,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,

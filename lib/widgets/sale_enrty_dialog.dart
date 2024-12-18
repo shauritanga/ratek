@@ -3,6 +3,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:ratek/db/local.dart';
+import 'package:ratek/db/remote.dart';
 
 class SaleEntryDialog extends StatefulWidget {
   const SaleEntryDialog({super.key});
@@ -61,16 +62,16 @@ class _SaleEntryDialogState extends State<SaleEntryDialog> {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: DropdownSearch<String>(
-                items: const [],
-                asyncItems: (String? filter) async {
+                items: (String? filter, t) async {
                   final results =
-                      await LocalDatabase.getFullNames(filter ?? '');
+                      await FirestoreService.getFullNames(filter ?? '');
+                  debugPrint(results.toString());
                   return results
                       .map((row) => row['full_name'] as String)
                       .toList();
                 },
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                  dropdownSearchDecoration: InputDecoration(
+                decoratorProps: const DropDownDecoratorProps(
+                  decoration: InputDecoration(
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                     labelStyle: TextStyle(),

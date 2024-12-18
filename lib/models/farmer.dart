@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Farmer {
   final String id;
   final String firstName;
@@ -41,6 +43,28 @@ class Farmer {
   factory Farmer.fromMap(Map<String, dynamic> map) {
     return Farmer(
         id: map['id'].toString(),
+        firstName: map['first_name'] ?? "",
+        middleName: map['middle_name'] ?? "",
+        corperateId: map['corperate_id'] ?? "",
+        lastName: map['last_name'] ?? "",
+        phone: map['phone'] ?? "",
+        gender: map['gender'] ?? "",
+        nida: map['nida'] ?? "",
+        dob: map['dob'] ?? "",
+        zone: map['zone'] ?? "",
+        ward: map['ward'] ?? "",
+        village: map['village'] ?? "",
+        accountNumber: map['account_number'] ?? "",
+        bankName: map['bank_name'] ?? "",
+        farmSize: map['farm_size'] ?? 0,
+        numberOfTrees: map['number_of_trees'] ?? 0,
+        numberOfTreesWithFruits: map['number_of_trees_with_fruits'] ?? 0);
+  }
+
+  static fromDocument(DocumentSnapshot doc) {
+    final map = doc.data() as Map<String, dynamic>;
+    return Farmer(
+        id: doc.id,
         firstName: map['first_name'] ?? "",
         middleName: map['middle_name'] ?? "",
         corperateId: map['corperate_id'] ?? "",

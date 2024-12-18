@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ratek/db/local.dart';
 import 'package:ratek/models/farmer.dart';
@@ -626,9 +624,11 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                   minWidth: double.infinity,
                   child: isLoading
                       ? const CircularProgressIndicator.adaptive()
-                      : Text(widget.farmerData == null
-                          ? "Tuma taarifa"
-                          : "Badilisha taarifa"),
+                      : Text(
+                          widget.farmerData == null
+                              ? "Tuma taarifa"
+                              : "Badilisha taarifa",
+                        ),
                 ),
                 const SizedBox(height: 16),
               ],

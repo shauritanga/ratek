@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ratek/db/local.dart';
+import 'package:ratek/deduction.dart';
 import 'package:ratek/farmers.dart';
 import 'package:ratek/get_started.dart';
 import 'package:ratek/groups.dart';
@@ -339,9 +340,17 @@ class _CooperativeScreenState extends State<CooperativeScreen> {
                     Expanded(
                       child: CustomCard(
                         color: Colors.yellow,
-                        title: "Fanya malipo",
+                        title: "Makato",
                         height: size.height * 0.09,
                         icon: "assets/images/payment.png",
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DeductionScreen(),
+                            ),
+                          );
+                        },
                       ),
                     )
                   ],

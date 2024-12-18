@@ -1,48 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ratek/db/local.dart';
 import 'package:ratek/farmer_details.dart';
-import 'package:ratek/models/farmer.dart';
 import 'package:ratek/new_farmer_entry_dialog.dart';
+import 'package:ratek/providers/farmer_provider.dart';
 
-class FarmersScreen extends StatefulWidget {
+class FarmersScreen extends ConsumerStatefulWidget {
   const FarmersScreen({super.key});
 
   @override
-  State<FarmersScreen> createState() => _FarmersScreenState();
+  ConsumerState<FarmersScreen> createState() => _FarmersScreenState();
 }
 
-class _FarmersScreenState extends State<FarmersScreen> {
-  Stream getSales() {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    return firestore.collection("uwamambo-farmers").snapshots();
-  }
-
+class _FarmersScreenState extends ConsumerState<FarmersScreen> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: LocalDatabase.getFarmers(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    final farmersAsync = ref.watch(farmersStreamProvider);
+    final farmerQuery = ref.watch(searchQueryProvider);
 
-        List<Farmer> farmers = snapshot.data!.map((farmerMap) {
-          return Farmer.fromMap(farmerMap);
-        }).toList();
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: farmersAsync.when(
+          data: (data) {
+            if (data.isEmpty) {
+              return Text("No any farmer registered!");
+            }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text("Wakulima"),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: ListView.builder(
+            final farmers = data
+                .where(
+                  (farmer) => farmer.firstName
+                      .toLowerCase()
+                      .contains(farmerQuery.toLowerCase()),
+                )
+                .toList();
+            return ListView.builder(
               itemCount: farmers.length,
               itemBuilder: (context, index) {
                 final farmer = farmers[index];
@@ -101,7 +95,7 @@ class _FarmersScreenState extends State<FarmersScreen> {
                                   )
                                 ],
                               ),
-                              const Icon(
+                              Icon(
                                 FontAwesomeIcons.chevronRight,
                                 color: Colors.grey,
                               ),
@@ -113,27 +107,120 @@ class _FarmersScreenState extends State<FarmersScreen> {
                   ),
                 );
               },
-            ),
+            );
+          },
+          error: (error, stackTrace) => Center(
+            child: Text(error.toString()),
           ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute<Null>(
-                    builder: (BuildContext context) {
-                      return const FarmerEntryDialog();
-                    },
-                    fullscreenDialog: true),
-              );
-              setState(() {});
-            },
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
+          loading: () => Center(
+            child: CupertinoActivityIndicator(),
           ),
-        );
-      },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute<Null>(
+                builder: (BuildContext context) {
+                  return const FarmerEntryDialog();
+                },
+                fullscreenDialog: true),
+          );
+          setState(() {});
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class CustomAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
+  const CustomAppBar({super.key});
+
+  @override
+  ConsumerState<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(120);
+}
+
+class _CustomAppBarState extends ConsumerState<CustomAppBar> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: '');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(width: 24),
+                Text(
+                  "Wakulima",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: TextFormField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  isDense: true,
+                  filled: true,
+                  hintText: "Tafuta mkulima...",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  fillColor: Colors.white,
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onChanged: (value) {
+                  ref.read(searchQueryProvider.notifier).state =
+                      _controller.text;
+                },
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Sale {
   final String id;
   final String date;
   final String farmer;
   final double amount;
   final String corperateId;
-  final int weight;
+  final double weight;
   final double receive;
 
   Sale({
@@ -37,6 +39,18 @@ class Sale {
       amount: map['amount'],
       corperateId: map['corperate_id'],
       weight: map['weight'],
+    );
+  }
+
+  static fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Sale(
+      id: doc.id,
+      date: data['date'] ?? DateTime.now(),
+      farmer: data['farmer'] ?? "",
+      amount: data['amount'] ?? 0.0,
+      corperateId: data['corperate_id'] ?? "",
+      weight: data['weight'] ?? 0.0,
     );
   }
 }
