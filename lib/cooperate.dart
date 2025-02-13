@@ -1,27 +1,30 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ratek/db/local.dart';
 import 'package:ratek/deduction.dart';
 import 'package:ratek/farmers.dart';
 import 'package:ratek/get_started.dart';
 import 'package:ratek/groups.dart';
 import 'package:ratek/news_details.dart';
+import 'package:ratek/providers/docs_provider.dart';
+import 'package:ratek/providers/sales_provider.dart';
 import 'package:ratek/sales.dart';
 import 'package:ratek/utils/number_format.dart';
+import 'package:ratek/vsla/scaffold_with_nav_bar.dart';
 import 'package:ratek/widgets/card.dart';
 import 'package:ratek/widgets/news_card.dart';
 import 'package:ratek/widgets/summary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CooperativeScreen extends StatefulWidget {
+class CooperativeScreen extends ConsumerStatefulWidget {
   const CooperativeScreen({super.key});
 
   @override
-  State<CooperativeScreen> createState() => _CooperativeScreenState();
+  ConsumerState<CooperativeScreen> createState() => _CooperativeScreenState();
 }
 
-class _CooperativeScreenState extends State<CooperativeScreen> {
+class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
   double totalSales = 0.0;
   int farmerCount = 0;
   int groupCount = 0;
@@ -95,22 +98,15 @@ class _CooperativeScreenState extends State<CooperativeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  void _loadData() async {
-    totalSales = await LocalDatabase.getTotalSales();
-    farmerCount = await LocalDatabase.getFarmerCount();
-    groupCount = await LocalDatabase.getGroupCount();
-    totalWeight = await LocalDatabase.getTotalWeight();
-
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final sales = ref.watch(saleProvider);
+    final docsAsync = ref.watch(documentCountProvider);
+
+    //totalWeight
+    final totalWeight = sales.fold(0.0, (acc, sale) => acc + sale.weight);
+
+    //totalWeight
+    final totalSales = sales.fold(0.0, (acc, sale) => acc + sale.amount);
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -247,8 +243,8 @@ class _CooperativeScreenState extends State<CooperativeScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Summary(
-                          title: formatNumber(farmerCount),
-                          subtitle: "Wakulima nilio sajili",
+                          title: (docsAsync.valueOrNull ?? 0).toString(),
+                          subtitle: "Wakulima walio sajili",
                           icon: FontAwesomeIcons.person,
                         ),
                       ),
@@ -350,6 +346,44 @@ class _CooperativeScreenState extends State<CooperativeScreen> {
                               builder: (_) => DeductionScreen(),
                             ),
                           );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomCard(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ScaffoldWithNavBar(),
+                            ),
+                          );
+                        },
+                        color: Colors.yellow,
+                        title: "VSLA",
+                        height: size.height * 0.09,
+                        icon: "assets/images/shopping-bag.png",
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: CustomCard(
+                        color: Colors.yellow,
+                        title: "Mengineyo",
+                        height: size.height * 0.09,
+                        icon: "assets/images/payment.png",
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (_) => DeductionScreen(),
+                          //   ),
+                          // );
                         },
                       ),
                     )

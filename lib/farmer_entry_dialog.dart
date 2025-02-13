@@ -42,7 +42,6 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
   Future uploadProfileImage(File file, XFile? pickedImage) async {
     final path = "images/${pickedImage!.name}";
     final ref = FirebaseStorage.instance.ref().child(path);
-
     try {
       ref.putFile(file);
     } catch (e) {

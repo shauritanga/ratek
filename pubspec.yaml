@@ -69,6 +69,8 @@ dependencies:
   excel: ^4.0.6
   device_info_plus: ^11.2.0
   equatable: ^2.0.7
+  hugeicons: ^0.0.7
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:

@@ -110,7 +110,7 @@ class _FarmersScreenState extends ConsumerState<FarmersScreen> {
             );
           },
           error: (error, stackTrace) => Center(
-            child: Text(error.toString()),
+            child: Text(stackTrace.toString()),
           ),
           loading: () => Center(
             child: CupertinoActivityIndicator(),

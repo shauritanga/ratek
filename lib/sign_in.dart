@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -111,9 +113,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       await preferences.setBool('isLoggedIn', true);
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      print('Firebase Auth Error: ${e.code} - ${e.message}');
+      debugPrint('Firebase Auth Error: ${e.code} - ${e.message}');
     } catch (e) {
-      print('General Sign-In Error: $e');
+      debugPrint('General Sign-In Error: $e');
     }
     return null; // Return null in case of an error
   }
@@ -284,8 +286,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(27),
-                      topRight: Radius.circular(27),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
                   padding:
@@ -293,99 +295,35 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () async {
-                        UserCredential? userCredential =
-                            await signInWithGoogle();
-                        if (userCredential != null) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Something went wrong, try again!"),
-                            ),
-                          );
+                        try {
+                          UserCredential? userCredential =
+                              await signInWithGoogle();
+
+                          debugPrint(userCredential.toString());
+                          if (userCredential != null) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const HomeScreen(),
+                              ),
+                            );
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          // Handle specific FirebaseAuth errors
+                          if (e.code ==
+                              'account-exists-with-different-credential') {
+                            debugPrint(
+                                'Account already exists with a different credential.');
+                          } else if (e.code == 'invalid-credential') {
+                            debugPrint('Invalid credential provided.');
+                          } else {
+                            debugPrint('FirebaseAuthException: ${e.message}');
+                          }
+                        } catch (e) {
+                          debugPrint('General error: $e');
                         }
                       },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Karibu"),
-                          FormBuilder(
-                              key: _fbKey,
-                              child: Column(
-                                children: [
-                                  FormBuilderTextField(
-                                    name: 'email',
-                                    decoration: const InputDecoration(
-                                        labelText: 'Your Email'),
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                      FormBuilderValidators.email(),
-                                    ]),
-                                  ),
-                                  FormBuilderTextField(
-                                    name: 'password',
-                                    decoration: const InputDecoration(
-                                        labelText: 'Your Password'),
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                      FormBuilderValidators.minLength(8),
-                                      FormBuilderValidators.maxLength(16),
-                                      // FormBuilderValidators.match(
-                                      //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                                    ]),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  MaterialButton(
-                                    height: 48,
-                                    minWidth: double.infinity,
-                                    color: Colors.green,
-                                    onPressed: () async {
-                                      if (_fbKey.currentState!
-                                          .saveAndValidate()) {
-                                        final email =
-                                            _fbKey.currentState!.value['email'];
-                                        final password = _fbKey
-                                            .currentState!.value['password'];
-
-                                        UserCredential? userCredential =
-                                            await showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              FutureProgressDialog(
-                                            signInUsingEmailAndPassword(
-                                                email, password),
-                                            message:
-                                                const Text("Subiri kidogo..."),
-                                          ),
-                                        );
-
-                                        if (userCredential != null) {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const HomeScreen(),
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    child: const Text('Login'),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  const Text("Au"),
-                                ],
-                              )),
-                          Image.asset("assets/images/eg.png"),
-                        ],
-                      ),
+                      child: Image.asset("assets/images/eg.png"),
                     ),
                   ),
                 ),

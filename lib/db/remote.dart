@@ -7,11 +7,7 @@ class FirestoreService {
 
   // Add a farmer to Firestore
   Future<void> addFarmer(Map<String, dynamic> farmer) async {
-    final deviceId = await getDeviceId();
-    await firestore
-        .collection('farmers')
-        .doc("${farmer['id']}-$deviceId")
-        .set(farmer);
+    await firestore.collection('farmers').add(farmer);
   }
 
   static Future<List<Map<String, dynamic>>> getFullNames(String query) async {

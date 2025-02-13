@@ -8,14 +8,12 @@ class Deduction extends Equatable {
   final double loan;
   final double hisa;
   final double fees;
-  final double ushuru;
   const Deduction({
     required this.id,
     required this.farmerId,
     required this.loan,
     required this.hisa,
     required this.fees,
-    required this.ushuru,
   });
 
   @override
@@ -26,7 +24,6 @@ class Deduction extends Equatable {
       loan,
       hisa,
       fees,
-      ushuru,
     ];
   }
 
@@ -36,7 +33,6 @@ class Deduction extends Equatable {
     double? loan,
     double? hisa,
     double? fees,
-    double? ushuru,
   }) {
     return Deduction(
       id: id ?? this.id,
@@ -44,7 +40,6 @@ class Deduction extends Equatable {
       loan: loan ?? this.loan,
       hisa: hisa ?? this.hisa,
       fees: fees ?? this.fees,
-      ushuru: ushuru ?? this.ushuru,
     );
   }
 
@@ -55,7 +50,6 @@ class Deduction extends Equatable {
       'loan': loan,
       'hisa': hisa,
       'fees': fees,
-      'ushuru': ushuru,
     };
   }
 
@@ -66,7 +60,6 @@ class Deduction extends Equatable {
       loan: map['loan']?.toDouble() ?? 0.0,
       hisa: map['hisa']?.toDouble() ?? 0.0,
       fees: map['fees']?.toDouble() ?? 0.0,
-      ushuru: map['ushuru']?.toDouble() ?? 0.0,
     );
   }
 
@@ -77,6 +70,6 @@ class Deduction extends Equatable {
 
   @override
   String toString() {
-    return 'Deduction(id: $id, farmerId: $farmerId, loan: $loan, hisa: $hisa, fees: $fees, ushuru: $ushuru)';
+    return 'Deduction(id: $id, farmerId: $farmerId, loan: $loan, hisa: $hisa, fees: $fees)';
   }
 }

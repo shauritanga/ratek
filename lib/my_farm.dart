@@ -164,7 +164,7 @@ class _MyFarmsScreenState extends ConsumerState<MyFarmsScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(20),
                           margin: const EdgeInsets.symmetric(vertical: 8),
-                          height: size.height * 0.22,
+                          height: size.height * 0.18,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(width: 0.5, color: Colors.grey),

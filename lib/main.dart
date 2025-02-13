@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ratek/get_started.dart';
+import 'package:ratek/home.dart';
 import 'package:ratek/utils/data_sync.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
@@ -33,9 +32,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      syncData();
-    });
+    // Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   syncData();
+    // });
   }
 
   // This widget is the root of your application.

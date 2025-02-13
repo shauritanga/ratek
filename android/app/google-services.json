@@ -14,8 +14,12 @@
       },
       "oauth_client": [
         {
-          "client_id": "891859102098-3ogl7a7h21chb9lshn84jq12nr7q2tid.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "891859102098-o0cql5o0gbl1dcibkh3780g6f85b2nvh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ratek",
+            "certificate_hash": "e2e0a5beb9891cd67b3f8884f6fbfc66b3af4076"
+          }
         }
       ],
       "api_key": [
@@ -25,19 +29,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "891859102098-3ogl7a7h21chb9lshn84jq12nr7q2tid.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "891859102098-clm30ejkcivchtk0ktr96j5lateogic7.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.ratek"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

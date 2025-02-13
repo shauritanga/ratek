@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
+
+import 'package:ratek/utils/date_formater.dart';
 
 class Farmer {
   final String id;
@@ -50,8 +53,8 @@ class Farmer {
         phone: map['phone'] ?? "",
         gender: map['gender'] ?? "",
         nida: map['nida'] ?? "",
-        dob: map['dob'] ?? "",
-        zone: map['zone'] ?? "",
+        dob: map['dob'] ?? formatDate(DateTime.now()),
+        zone: map['zone'] ?? "Hasamba",
         ward: map['ward'] ?? "",
         village: map['village'] ?? "",
         accountNumber: map['account_number'] ?? "",
@@ -72,8 +75,8 @@ class Farmer {
         phone: map['phone'] ?? "",
         gender: map['gender'] ?? "",
         nida: map['nida'] ?? "",
-        dob: map['dob'] ?? "",
-        zone: map['zone'] ?? "",
+        dob: map['dob'] ?? formatDate(DateTime.now()),
+        zone: map['zone'] ?? "Hasamba",
         ward: map['ward'] ?? "",
         village: map['village'] ?? "",
         accountNumber: map['account_number'] ?? "",
@@ -103,5 +106,46 @@ class Farmer {
       'number_of_trees': numberOfTrees,
       'number_of_trees_with_fruits': numberOfTreesWithFruits,
     };
+  }
+
+  Farmer copyWith({
+    String? id,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? phone,
+    ValueGetter<String?>? corperateId,
+    String? gender,
+    String? nida,
+    String? dob,
+    String? zone,
+    String? ward,
+    String? village,
+    String? accountNumber,
+    String? bankName,
+    int? farmSize,
+    int? numberOfTrees,
+    int? numberOfTreesWithFruits,
+  }) {
+    return Farmer(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      corperateId: corperateId != null ? corperateId() : this.corperateId,
+      gender: gender ?? this.gender,
+      nida: nida ?? this.nida,
+      dob: dob ?? this.dob,
+      zone: zone ?? this.zone,
+      ward: ward ?? this.ward,
+      village: village ?? this.village,
+      accountNumber: accountNumber ?? this.accountNumber,
+      bankName: bankName ?? this.bankName,
+      farmSize: farmSize ?? this.farmSize,
+      numberOfTrees: numberOfTrees ?? this.numberOfTrees,
+      numberOfTreesWithFruits:
+          numberOfTreesWithFruits ?? this.numberOfTreesWithFruits,
+    );
   }
 }

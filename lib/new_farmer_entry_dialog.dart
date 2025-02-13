@@ -1,11 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:ratek/db/local.dart';
+import 'package:ratek/db/remote.dart';
 import 'package:ratek/models/farmer.dart';
 
 class FarmerEntryDialog extends StatefulWidget {
@@ -63,7 +66,10 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
       numberOfTrees = farmer.numberOfTrees.toString();
       numberOfTreesWithFruits = farmer.numberOfTreesWithFruits.toString();
 
-      _dayController.text = formatDate(DateTime.parse(farmer.dob));
+      final dobString = farmer.dob;
+
+      _dayController.text =
+          DateFormat('dd/MM/yyyy').parse(dobString).toString();
     } else {
       final DateTime now = DateTime.now();
       _dayController.text = formatDate(now);
@@ -540,7 +546,6 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                 const SizedBox(height: 16),
                 MaterialButton(
                   onPressed: () async {
-                    bool reference = false;
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
 
@@ -554,68 +559,67 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                         );
                         return;
                       }
-                      Map<String, dynamic> data = {
-                        "first_name": firstName,
-                        "middle_name": secondName,
-                        "last_name": thirdName,
-                        "gender": selectedGender!,
-                        "phone": phoneNumber,
-                        "nida": nida,
-                        "dob": dob,
-                        "synced": 0,
-                        "zone": selectedZone!,
-                        "ward": ward,
-                        "village": village,
-                        "bank_name": bankName!,
-                        "account_number": accountNumber,
-                        "farm_size": numberOfHectors,
-                        "number_of_trees": numberOfTrees,
-                        "number_of_trees_with_fruits": numberOfTreesWithFruits,
-                      };
+                      try {
+                        Map<String, dynamic> data = {
+                          "first_name": firstName,
+                          "middle_name": secondName,
+                          "last_name": thirdName,
+                          "gender": selectedGender!,
+                          "phone": phoneNumber,
+                          "nida": nida,
+                          "dob": dob,
+                          "synced": 0,
+                          "zone": selectedZone!,
+                          "ward": ward,
+                          "village": village,
+                          "bank_name": bankName!,
+                          "account_number": accountNumber,
+                          "farm_size": int.parse(numberOfHectors),
+                          "number_of_trees": int.parse(numberOfTrees),
+                          "number_of_trees_with_fruits":
+                              int.parse(numberOfTreesWithFruits),
+                        };
 
-                      if (widget.farmerData == null) {
-                        // New farmer - Insert to Firestore
-                        reference = await showDialog(
-                          context: context,
-                          builder: (context) => FutureProgressDialog(
-                            LocalDatabase.insertFarmer(data),
-                            message: const Text('Saving...'),
+                        if (widget.farmerData == null) {
+                          // New farmer - Insert to Firestore
+                          await showDialog(
+                            context: context,
+                            builder: (context) => FutureProgressDialog(
+                              FirestoreService().addFarmer(data),
+                              message: const Text('Saving...'),
+                            ),
+                          );
+                        } else {
+                          // Edit farmer - Update Firestore record
+                          data['id'] = widget.farmerData!.id;
+                          await showDialog(
+                            context: context,
+                            builder: (context) => FutureProgressDialog(
+                              FirestoreService().updateFarmer(data),
+                              message: const Text('Saving...'),
+                            ),
+                          );
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Umefanikwa kusajiri"),
+                            duration: Duration(seconds: 3),
                           ),
                         );
-                      } else {
-                        // Edit farmer - Update Firestore record
-                        data['id'] = widget.farmerData!.id;
-                        reference = await showDialog(
-                          context: context,
-                          builder: (context) => FutureProgressDialog(
-                            LocalDatabase.updateFarmer(data),
-                            message: const Text('Saving...'),
-                          ),
+
+                        await Future.delayed(
+                          const Duration(seconds: 3),
                         );
-                      }
-                      if (!reference) {
-                        // ignore: use_build_context_synchronously
+
+                        Navigator.pop(context);
+                      } catch (e) {
+                        print(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Hujafanikiwa kusajiri"),
                           ),
                         );
-                        return;
                       }
-
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Umefanikwa kusajiri"),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-
-                      await Future.delayed(
-                        const Duration(seconds: 3),
-                      );
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
                     }
                   },
                   color: Theme.of(context).colorScheme.primary,

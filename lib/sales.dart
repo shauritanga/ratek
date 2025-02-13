@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:ratek/models/farmer.dart';
 import 'package:ratek/models/sale.dart';
+import 'package:ratek/providers/farmer_provider.dart';
 import 'package:ratek/providers/sales_provider.dart';
 import 'package:ratek/widgets/sale_enrty_dialog.dart';
 
@@ -20,8 +22,10 @@ class _SalesScreenState extends ConsumerState<SalesScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final farmers = ref.watch(farmerProvider);
 
     final salesAsync = ref.watch(salesStreamProvider);
+    debugPrint(farmers.length.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -43,9 +47,31 @@ class _SalesScreenState extends ConsumerState<SalesScreen> {
               itemCount: sales.length,
               itemBuilder: (context, index) {
                 Sale sale = sales[index];
+                Farmer farmer = farmers.firstWhere(
+                  (farmer) => farmer.id == sale.farmer,
+                  orElse: () => Farmer(
+                    id: "",
+                    firstName: "",
+                    middleName: "",
+                    lastName: "",
+                    phone: "",
+                    gender: "",
+                    nida: "",
+                    zone: "",
+                    ward: "",
+                    dob: "",
+                    village: "",
+                    accountNumber: "",
+                    bankName: "",
+                    farmSize: 0,
+                    numberOfTrees: 0,
+                    numberOfTreesWithFruits: 0,
+                  ),
+                );
                 return SaleSummary(
                   size: size,
                   sale: sale,
+                  farmer: farmer,
                   formatter: _formatter,
                 );
               },
@@ -83,11 +109,13 @@ class SaleSummary extends StatelessWidget {
     super.key,
     required this.size,
     required this.sale,
+    required this.farmer,
     required NumberFormat formatter,
   }) : formatter = formatter;
 
   final Size size;
   final Sale sale;
+  final Farmer farmer;
   final NumberFormat formatter;
 
   @override
@@ -120,7 +148,7 @@ class SaleSummary extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              sale.farmer,
+              "${farmer.firstName} ${farmer.lastName}",
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
@@ -185,7 +213,7 @@ class SaleSummary extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: Text(
-                        "${formatter.format((sale.amount - sale.receive))} Tsh/=",
+                        "${formatter.format((sale.uwamambo))} Tsh/=",
                         textAlign: TextAlign.left,
                       ),
                     ),

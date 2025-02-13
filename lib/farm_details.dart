@@ -41,8 +41,12 @@ class _FarmDetailsState extends State<FarmDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Farm details"),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: const Text("Farm details"),
+            ),
             SizedBox(
               height: size.height * 0.4,
               width: double.infinity,
