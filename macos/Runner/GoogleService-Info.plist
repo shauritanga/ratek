@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCzwyISsx4w5J4mT_Cw1FMui65jcMe63s0</string>
+	<string>AIzaSyBKzrnwG7OuoFTengi4JPeHfLHYV1T-yVM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>891859102098</string>
+	<string>58649514855</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.ratek</string>
 	<key>PROJECT_ID</key>
-	<string>agripoa-b54d1</string>
+	<string>agrivsla</string>
 	<key>STORAGE_BUCKET</key>
-	<string>agripoa-b54d1.appspot.com</string>
+	<string>agrivsla.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:891859102098:ios:7f214ec82ecebee17d394b</string>
+	<string>1:58649514855:ios:40a5f1513d2b21907715c2</string>
 </dict>
 </plist>

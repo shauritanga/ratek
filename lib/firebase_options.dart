@@ -41,48 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAxsWTdZdM8oHF5W9x_dmj79Li2QJ1nZK8',
-    appId: '1:891859102098:web:640a085cbd86d7d57d394b',
-    messagingSenderId: '891859102098',
-    projectId: 'agripoa-b54d1',
-    authDomain: 'agripoa-b54d1.firebaseapp.com',
-    storageBucket: 'agripoa-b54d1.appspot.com',
-    measurementId: 'G-N98BC85DV2',
+    apiKey: 'AIzaSyAE4OaIUO5S0ZC9sAfRcv0WKdRZjIOcylA',
+    appId: '1:58649514855:web:150cf36e422c5d477715c2',
+    messagingSenderId: '58649514855',
+    projectId: 'agrivsla',
+    authDomain: 'agrivsla.firebaseapp.com',
+    storageBucket: 'agrivsla.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB5dG2Ds0lUSbq1QEuTDRMXrzmCksqlyP0',
-    appId: '1:891859102098:android:0f8ce931eafa95c87d394b',
-    messagingSenderId: '891859102098',
-    projectId: 'agripoa-b54d1',
-    storageBucket: 'agripoa-b54d1.appspot.com',
+    apiKey: 'AIzaSyCh_ik2ZKXYxC43iW34uLlpYsWugRUGqRM',
+    appId: '1:58649514855:android:7e1b2a906acd37487715c2',
+    messagingSenderId: '58649514855',
+    projectId: 'agrivsla',
+    storageBucket: 'agrivsla.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCzwyISsx4w5J4mT_Cw1FMui65jcMe63s0',
-    appId: '1:891859102098:ios:7f214ec82ecebee17d394b',
-    messagingSenderId: '891859102098',
-    projectId: 'agripoa-b54d1',
-    storageBucket: 'agripoa-b54d1.appspot.com',
+    apiKey: 'AIzaSyBKzrnwG7OuoFTengi4JPeHfLHYV1T-yVM',
+    appId: '1:58649514855:ios:40a5f1513d2b21907715c2',
+    messagingSenderId: '58649514855',
+    projectId: 'agrivsla',
+    storageBucket: 'agrivsla.firebasestorage.app',
     iosBundleId: 'com.example.ratek',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCzwyISsx4w5J4mT_Cw1FMui65jcMe63s0',
-    appId: '1:891859102098:ios:7f214ec82ecebee17d394b',
-    messagingSenderId: '891859102098',
-    projectId: 'agripoa-b54d1',
-    storageBucket: 'agripoa-b54d1.appspot.com',
+    apiKey: 'AIzaSyBKzrnwG7OuoFTengi4JPeHfLHYV1T-yVM',
+    appId: '1:58649514855:ios:40a5f1513d2b21907715c2',
+    messagingSenderId: '58649514855',
+    projectId: 'agrivsla',
+    storageBucket: 'agrivsla.firebasestorage.app',
     iosBundleId: 'com.example.ratek',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAxsWTdZdM8oHF5W9x_dmj79Li2QJ1nZK8',
-    appId: '1:891859102098:web:6f7e45e4f8ca25e17d394b',
-    messagingSenderId: '891859102098',
-    projectId: 'agripoa-b54d1',
-    authDomain: 'agripoa-b54d1.firebaseapp.com',
-    storageBucket: 'agripoa-b54d1.appspot.com',
-    measurementId: 'G-G1HWWT0F7K',
+    apiKey: 'AIzaSyAE4OaIUO5S0ZC9sAfRcv0WKdRZjIOcylA',
+    appId: '1:58649514855:web:450c6245c337e19a7715c2',
+    messagingSenderId: '58649514855',
+    projectId: 'agrivsla',
+    authDomain: 'agrivsla.firebaseapp.com',
+    storageBucket: 'agrivsla.firebasestorage.app',
   );
+
 }

@@ -5,9 +5,10 @@ class Sale {
   final String date;
   final String farmer;
   final double amount;
-  final String corperate;
   final double weight;
+  final String type;
   final double uwamambo;
+  final double? agripoa;
   final double receive;
 
   Sale({
@@ -15,9 +16,10 @@ class Sale {
     required this.date,
     required this.farmer,
     required this.amount,
-    required this.corperate,
     required this.weight,
+    required this.type,
     required this.uwamambo,
+    this.agripoa,
     required this.receive,
   });
 
@@ -28,8 +30,10 @@ class Sale {
       'date': date,
       'farmer': farmer,
       'amount': amount,
-      'corperate': corperate,
       "uwamambo": uwamambo,
+      "type": type,
+      "receive": receive,
+      "agripoa": agripoa,
       'weight': weight,
     };
   }
@@ -41,9 +45,10 @@ class Sale {
         date: map['date'],
         farmer: map['farmer'],
         amount: map['amount'],
-        corperate: map['coorperate'],
         weight: map['weight'],
+        type: map['type'],
         uwamambo: map['uwamambo'],
+        agripoa: map['agripoa'],
         receive: map['receive']);
   }
 
@@ -53,11 +58,12 @@ class Sale {
       id: doc.id,
       date: data['date'] ?? DateTime.now(),
       farmer: data['farmer'] ?? "",
-      amount: data['amount'] ?? 0.0,
-      corperate: data['corperate'] ?? "",
-      weight: data['weight'] ?? 0.0,
-      uwamambo: data['uwamambo'] ?? 0.0,
-      receive: data['receive'] ?? 0.0,
+      amount: (data['amount'] ?? 0).toDouble(),
+      type: data['type'] ?? "",
+      weight: (data['weight'] ?? 0.0).toDouble(),
+      uwamambo: (data['uwamambo'] ?? 0).toDouble(),
+      agripoa: (data['agripoa'] ?? 0).toDouble(),
+      receive: (data['receive'] ?? 0).toDouble(),
     );
   }
 
@@ -66,9 +72,10 @@ class Sale {
     String? date,
     String? farmer,
     double? amount,
-    String? corperate,
     double? weight,
+    String? type,
     double? uwamambo,
+    double? agripoa,
     double? receive,
   }) {
     return Sale(
@@ -76,9 +83,10 @@ class Sale {
       date: date ?? this.date,
       farmer: farmer ?? this.farmer,
       amount: amount ?? this.amount,
-      corperate: corperate ?? this.corperate,
+      type: type ?? this.type,
       weight: weight ?? this.weight,
       uwamambo: uwamambo ?? this.uwamambo,
+      agripoa: agripoa ?? this.agripoa,
       receive: receive ?? this.receive,
     );
   }

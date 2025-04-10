@@ -1,0 +1,2 @@
+/Users/athanasshauritanga/Desktop/Mobile/ratek/android/app/.cxx/Debug/wes6hmi4/x86/CMakeFiles/edit_cache.dir
+/Users/athanasshauritanga/Desktop/Mobile/ratek/android/app/.cxx/Debug/wes6hmi4/x86/CMakeFiles/rebuild_cache.dir

@@ -6,12 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
-import 'package:ratek/models/deduction.dart';
+import 'package:ratek/db/remote.dart';
 import 'package:ratek/models/farmer.dart';
-import 'package:ratek/models/sale.dart';
-import 'package:ratek/providers/deduction_provider.dart';
 import 'package:ratek/providers/farmer_provider.dart';
-import 'package:ratek/providers/sales_provider.dart';
 import 'package:ratek/utils/sentense_cate.dart';
 
 class SaleEntryDialog extends ConsumerStatefulWidget {
@@ -74,7 +71,8 @@ class _SaleEntryDialogState extends ConsumerState<SaleEntryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final deductions = ref.watch(deductionProvider);
+    final farmers = ref.watch(farmerProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mauzo"),
@@ -92,7 +90,7 @@ class _SaleEntryDialogState extends ConsumerState<SaleEntryDialog> {
             const SizedBox(height: 8),
             DropdownSearch<Farmer>(
               items: (String? filter, t) async {
-                final results = await ref.watch(farmerfutureProvider.future);
+                final results = await ref.read(farmerfutureProvider.future);
                 return results
                     .map((farmer) => farmer)
                     .where(
@@ -196,78 +194,119 @@ class _SaleEntryDialogState extends ConsumerState<SaleEntryDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  onPressed: _addInputField,
-                  child: const Text('Ongeza'),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _addInputField,
+                    style: TextButton.styleFrom(
+                      side: BorderSide(color: Colors.green),
+                      backgroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      'Ongeza',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final deduction = deductions.firstWhere(
-                      (deduction) => deduction.farmerId == selectedFarmer,
-                      orElse: () => Deduction(
-                        id: "",
-                        farmerId: "",
-                        loan: 0.0,
-                        hisa: 0.0,
-                        fees: 0.0,
-                      ),
-                    );
-                    final totalDeduction =
-                        deduction.fees + deduction.hisa + deduction.loan;
-                    try {
-                      double cost = 0.0;
-                      List<String> values = _controllers
-                          .map((controller) => controller.text)
-                          .toList();
-                      final totalWeight = values.fold(
-                          0.0,
-                          (previous, element) =>
-                              previous + double.parse(element));
-                      cost = totalWeight * _selectedPrice;
-                      final receive = totalWeight * (_selectedPrice - 70);
-                      final uwamambo = cost - receive;
-                      Sale sale = Sale(
-                        id: "",
-                        date: DateTime.now().toIso8601String(),
-                        farmer: selectedFarmer!,
-                        amount: cost,
-                        corperate: "g45e",
-                        weight: totalWeight,
-                        uwamambo: uwamambo,
-                        receive: receive - totalDeduction,
-                      );
-
-                      await showDialog(
-                        context: context,
-                        builder: (context) => FutureProgressDialog(
-                            ref.read(saleProvider.notifier).addDeduction(sale),
-                            message: const Text('Inatuma...')),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Mauzo yamefanyika"),
-                          duration: Duration(seconds: 3),
+                SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final deduction = farmers.firstWhere(
+                        (farmer) => farmer.id == selectedFarmer,
+                        orElse: () => Farmer(
+                          id: "",
+                          firstName: "",
+                          middleName: "",
+                          lastName: "",
+                          phone: "",
+                          gender: "",
+                          nida: "",
+                          dob: "",
+                          zone: "",
+                          ward: "",
+                          district: "",
+                          village: "",
+                          accountNumber: "",
+                          bankName: "",
+                          farmSize: 0,
+                          numberOfTrees: 0,
+                          numberOfTreesWithFruits: 0,
+                          loan: 0.0,
+                          subscriptionFee: 0.0,
+                          entryFee: 0.0,
                         ),
                       );
+                      double totalDeduction = (deduction.entryFee ?? 0) +
+                          (deduction.subscriptionFee ?? 0) +
+                          (deduction.loan ?? 0);
+                      try {
+                        double cost = 0.0;
+                        List<String> values = _controllers
+                            .map((controller) => controller.text)
+                            .toList();
+                        final totalWeight = values.fold(
+                            0.0,
+                            (previous, element) =>
+                                previous + double.parse(element));
+                        cost = totalWeight * _selectedPrice;
+                        final receive = totalWeight * (_selectedPrice - 70);
+                        final uwamambo = cost - receive;
 
-                      await Future.delayed(
-                        const Duration(seconds: 3),
-                      );
-                      Navigator.pop(context);
-                    } catch (e) {
-                      debugPrint(e.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Mauzo hayajafanyika, jaribu tena!"),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white),
-                  child: const Text("Tuma"),
+                        Map<String, dynamic> saleData = {
+                          "date": DateTime.now().toIso8601String(),
+                          "farmer": selectedFarmer!,
+                          "amount": cost,
+                          "weight": totalWeight,
+                          "type": "good",
+                          "uwamambo": uwamambo,
+                          "receive": receive - totalDeduction,
+                        };
+
+                        await showDialog(
+                          context: context,
+                          builder: (context) => FutureProgressDialog(
+                            FirestoreService().addSale(saleData).timeout(
+                                Duration(seconds: 5),
+                                onTimeout: () => true),
+                            message: const Text('Inatuma...'),
+                          ),
+                        );
+
+                        Map<String, dynamic> update = {
+                          "entry_fee": 0.0,
+                          "subscription_fee": 0.0,
+                          "loan": 0.0
+                        };
+
+                        await FirestoreService()
+                            .updateFarmer(update, selectedFarmer!)
+                            .timeout(Duration(seconds: 5),
+                                onTimeout: () => true);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Mauzo yamefanyika"),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+
+                        await Future.delayed(
+                          const Duration(seconds: 2),
+                        );
+                        Navigator.pop(context);
+                      } catch (e) {
+                        debugPrint(e.toString());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Mauzo hayajafanyika, jaribu tena!"),
+                          ),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white),
+                    child: const Text("Tuma"),
+                  ),
                 ),
               ],
             ),

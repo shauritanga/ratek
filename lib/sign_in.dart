@@ -3,10 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +27,9 @@ final roleProvider = FutureProvider<String>(
       final role = preferences.getString("role");
       return role ?? "unknown";
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return "unknown";
     }
   },
@@ -36,7 +37,6 @@ final roleProvider = FutureProvider<String>(
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   String cooperateCode = "";
   String username = "";
   String password = "";

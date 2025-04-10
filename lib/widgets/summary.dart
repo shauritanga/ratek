@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Summary extends StatelessWidget {
   final String title;
@@ -18,18 +19,18 @@ class Summary extends StatelessWidget {
         Icon(
           icon,
           color: Colors.green,
-          size: 12,
+          size: 12.w,
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Text(
           title,
-          style: const TextStyle(color: Colors.green, fontSize: 14),
+          style: TextStyle(color: Colors.green, fontSize: 14.sp),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Flexible(
           child: Text(
             subtitle,
-            style: const TextStyle(fontSize: 10),
+            style: TextStyle(fontSize: 10.sp),
             textAlign: TextAlign.center,
           ),
         ),

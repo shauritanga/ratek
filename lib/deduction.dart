@@ -4,9 +4,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ratek/models/deduction.dart';
+import 'package:ratek/db/remote.dart';
 import 'package:ratek/models/farmer.dart';
-import 'package:ratek/providers/deduction_provider.dart';
 import 'package:ratek/providers/farmer_provider.dart';
 import 'package:ratek/utils/sentense_cate.dart';
 
@@ -46,7 +45,6 @@ class _DeductionScreenState extends ConsumerState<DeductionScreen> {
               DropdownSearch<Farmer>(
                 items: (String? filter, t) async {
                   final results = await ref.watch(farmerfutureProvider.future);
-                  print("filer:$filter");
                   // If filter is empty or null, return all farmers
                   if (filter == null || filter.isEmpty) {
                     return results;
@@ -57,9 +55,6 @@ class _DeductionScreenState extends ConsumerState<DeductionScreen> {
                     final firstName = farmer.firstName.toLowerCase().trim();
                     return firstName.contains(normalizedFilter);
                   }).toList();
-
-                  print(filtered.length);
-
                   return filtered;
                 },
                 compareFn: (item1, item2) => item1 != item2,
@@ -123,7 +118,7 @@ class _DeductionScreenState extends ConsumerState<DeductionScreen> {
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
               SizedBox(height: 24),
-              Text("Hisa"),
+              Text("Ada"),
               SizedBox(height: 8),
               TextFormField(
                 decoration: InputDecoration(
@@ -165,21 +160,19 @@ class _DeductionScreenState extends ConsumerState<DeductionScreen> {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState?.save();
 
-                Deduction deduction = Deduction(
-                  id: "",
-                  farmerId: selectedFarmer!,
-                  loan: double.parse(loan),
-                  hisa: double.parse(hisa),
-                  fees: double.parse(fees),
-                );
+                Map<String, dynamic> farmer = {
+                  "loan": double.parse(loan),
+                  "subscription_fee": double.parse(hisa),
+                  "entry_fee": double.parse(fees)
+                };
 
                 try {
                   setState(() {
                     isSaving = true;
                   });
-                  await ref
-                      .read(deductionProvider.notifier)
-                      .addDeduction(deduction);
+                  await FirestoreService()
+                      .updateFarmer(farmer, selectedFarmer!)
+                      .timeout(Duration(seconds: 5), onTimeout: () => true);
                   setState(() {
                     isSaving = false;
                   });

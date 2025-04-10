@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
@@ -24,7 +25,7 @@ class CustomCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8.w),
         width: width,
         height: height,
         decoration: BoxDecoration(
@@ -46,13 +47,13 @@ class CustomCard extends StatelessWidget {
           children: [
             Image.asset(
               icon,
-              width: 20,
-              height: 20,
+              width: 20.w,
+              height: 20.h,
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6.h),
             Text(
               title,
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 12.sp),
             )
           ],
         ),

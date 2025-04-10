@@ -25,7 +25,6 @@ class _SalesScreenState extends ConsumerState<SalesScreen> {
     final farmers = ref.watch(farmerProvider);
 
     final salesAsync = ref.watch(salesStreamProvider);
-    debugPrint(farmers.length.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -60,6 +59,10 @@ class _SalesScreenState extends ConsumerState<SalesScreen> {
                     zone: "",
                     ward: "",
                     dob: "",
+                    entryFee: 0.0,
+                    subscriptionFee: 0.0,
+                    loan: 0,
+                    district: "",
                     village: "",
                     accountNumber: "",
                     bankName: "",

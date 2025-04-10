@@ -1,17 +1,21 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ratek/deduction.dart';
+import 'package:intl/intl.dart';
+import 'package:ratek/deductions.dart';
 import 'package:ratek/farmers.dart';
+import 'package:ratek/features/dashboard/report.dart';
+import 'package:ratek/features/statistics/stats.dart';
 import 'package:ratek/get_started.dart';
 import 'package:ratek/groups.dart';
 import 'package:ratek/news_details.dart';
 import 'package:ratek/providers/docs_provider.dart';
 import 'package:ratek/providers/sales_provider.dart';
+import 'package:ratek/rejects.dart';
 import 'package:ratek/sales.dart';
 import 'package:ratek/utils/number_format.dart';
-import 'package:ratek/vsla/scaffold_with_nav_bar.dart';
 import 'package:ratek/widgets/card.dart';
 import 'package:ratek/widgets/news_card.dart';
 import 'package:ratek/widgets/summary.dart';
@@ -107,6 +111,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
 
     //totalWeight
     final totalSales = sales.fold(0.0, (acc, sale) => acc + sale.amount);
+
     double statusBarHeight = MediaQuery.of(context).viewPadding.top;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -161,7 +166,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
           Stack(
             children: [
               Container(
-                height: size.height * 0.33,
+                height: size.height * 0.33.h,
               ),
               Container(
                 width: double.infinity,
@@ -175,39 +180,39 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
               ),
               Positioned(
                 top: statusBarHeight,
-                left: 16,
+                left: 16.w,
                 child: GestureDetector(
                   onTap: () {
                     _scaffoldKey.currentState?.openDrawer();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(4),
-                    height: 48,
-                    width: 48,
+                    height: 48.h,
+                    width: 48.w,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(5.r),
                     ),
                     child: Image.asset("assets/images/menu.png"),
                   ),
                 ),
               ),
               Positioned(
-                top: size.height * 0.19,
-                left: 16,
-                right: 16,
+                top: size.height * 0.19.h,
+                left: 16.w,
+                right: 16.w,
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  height: size.height * 0.13,
+                  height: size.height * 0.13.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(7),
-                    boxShadow: const [
+                    borderRadius: BorderRadius.circular(7.r),
+                    boxShadow: [
                       BoxShadow(
-                          offset: Offset(0.5, 1),
-                          blurRadius: 0.5,
-                          spreadRadius: 1,
+                          offset: Offset(0.5.w, 1.h),
+                          blurRadius: 0.5.w,
+                          spreadRadius: 1.h,
                           color: Colors.grey)
                     ],
                   ),
@@ -215,18 +220,20 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                     children: [
                       Expanded(
                         child: Summary(
-                          title: formatNumber((totalWeight / 1000)),
+                          title: NumberFormat.decimalPatternDigits(
+                                  decimalDigits: 1)
+                              .format(totalWeight / 1000),
                           subtitle: "Tani zilizopimwa",
                           icon: FontAwesomeIcons.weightHanging,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
-                        width: 0.5,
-                        height: size.height * 0.06,
+                        width: 0.5.w,
+                        height: size.height * 0.06.h,
                         color: Colors.grey,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Summary(
                           title: formatNumber(totalSales, type: "short"),
@@ -234,13 +241,13 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           icon: FontAwesomeIcons.arrowUpRightDots,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
-                        width: 0.5,
-                        height: size.height * 0.06,
+                        width: 0.5.w,
+                        height: size.height * 0.06.h,
                         color: Colors.grey,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Summary(
                           title: (docsAsync.valueOrNull ?? 0).toString(),
@@ -248,13 +255,13 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           icon: FontAwesomeIcons.person,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Container(
-                        width: 0.5,
-                        height: size.height * 0.06,
+                        width: 0.5.w,
+                        height: size.height * 0.06.h,
                         color: Colors.grey,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: Summary(
                           title: formatNumber(groupCount),
@@ -269,13 +276,13 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 const Text("Vipengele"),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
@@ -290,11 +297,11 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           );
                         },
                         title: "Sajili wakulima",
-                        height: size.height * 0.09,
+                        height: size.height * 0.09.h,
                         icon: "assets/images/book.png",
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: CustomCard(
                         onTap: () {
@@ -306,14 +313,14 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           );
                         },
                         color: Colors.yellow,
-                        title: "Tengeneza kikundi",
-                        height: size.height * 0.09,
+                        title: "Vikundi",
+                        height: size.height * 0.09.h,
                         icon: "assets/images/people.png",
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
@@ -332,7 +339,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                         icon: "assets/images/shopping-bag.png",
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: CustomCard(
                         color: Colors.yellow,
@@ -343,7 +350,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => DeductionScreen(),
+                              builder: (_) => FarmerFeesTableScreen(),
                             ),
                           );
                         },
@@ -351,7 +358,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                     )
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
@@ -360,38 +367,51 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const ScaffoldWithNavBar(),
+                              builder: (_) => ProductionDataScreen(),
                             ),
                           );
                         },
                         color: Colors.yellow,
-                        title: "VSLA",
-                        height: size.height * 0.09,
-                        icon: "assets/images/shopping-bag.png",
+                        title: "Takwimu",
+                        height: size.height * 0.09.h,
+                        icon: "assets/images/stats.png",
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: CustomCard(
                         color: Colors.yellow,
-                        title: "Mengineyo",
-                        height: size.height * 0.09,
-                        icon: "assets/images/payment.png",
+                        title: "Mbovu/Reject",
+                        height: size.height * 0.09.h,
+                        icon: "assets/images/rejected.png",
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => DeductionScreen(),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => RejectSalesScreen(),
+                            ),
+                          );
                         },
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 16.h),
+                CustomCard(
+                  color: Colors.yellow,
+                  width: double.infinity,
+                  title: "Ripoti",
+                  icon: "assets/images/report.png",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DashboardScreen()),
+                    );
+                  },
+                ),
+                SizedBox(height: 24.h),
                 const Text("Taarifa mbalimbali"),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
               ],
             ),
           ),
@@ -403,8 +423,7 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
             itemBuilder: (context, index) {
               final habari = news[index];
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: NewsCard(
                   onTap: () {
                     Navigator.push(
@@ -415,8 +434,8 @@ class _CooperativeScreenState extends ConsumerState<CooperativeScreen> {
                     );
                   },
                   color: Colors.green,
-                  height: size.height * 0.15,
-                  width: size.width * 0.23,
+                  height: size.height * 0.15.h,
+                  width: size.width * 0.23.w,
                   title: habari['title'],
                   image: habari['image'],
                   shortDescriprion: habari['short_description'],

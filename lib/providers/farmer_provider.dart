@@ -9,9 +9,14 @@ final farmersStreamProvider = StreamProvider<List<Farmer>>((ref) {
 
   CollectionReference farmersCollection = firestore.collection("farmers");
   return farmersCollection.snapshots().map((querySnapshot) {
-    return querySnapshot.docs
+    List<Farmer> farmers = querySnapshot.docs
         .map<Farmer>((doc) => Farmer.fromDocument(doc))
         .toList();
+
+    // Sort the list by first name
+    farmers.sort((a, b) => a.firstName.compareTo(b.firstName));
+
+    return farmers;
   });
 });
 
@@ -25,9 +30,7 @@ final farmerfutureProvider = FutureProvider<List<Farmer>>((ref) async {
   final firestore = ref.watch(firestoreProvider);
   CollectionReference farmersCollection = firestore.collection("farmers");
   QuerySnapshot snapshot = await farmersCollection.get();
-  return snapshot.docs
-      .map((doc) => Farmer.fromMap(doc.data() as Map<String, dynamic>))
-      .toList();
+  return snapshot.docs.map<Farmer>((doc) => Farmer.fromDocument(doc)).toList();
 });
 
 final farmerProvider = StateNotifierProvider<DeductionNotifier, List<Farmer>>(
@@ -38,36 +41,36 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class DeductionNotifier extends StateNotifier<List<Farmer>> {
   DeductionNotifier() : super([]) {
-    _loadDeductions(); // Load deductions from Firestore when initializing
+    _loadFarmers(); // Load deductions from Firestore when initializing
   }
 
   // Load deductions from Firestore
-  Future<void> _loadDeductions() async {
+  Future<void> _loadFarmers() async {
     try {
       final querySnapshot = await _firestore.collection('farmers').get();
-      final sales =
-          querySnapshot.docs.map((doc) => Farmer.fromMap(doc.data())).toList();
-      state = sales;
+      List<Farmer> farmers = querySnapshot.docs
+          .map<Farmer>((doc) => Farmer.fromDocument(doc))
+          .toList();
+      state = farmers;
     } catch (e) {
-      debugPrint("Error loading deductions from Firestore: $e");
+      debugPrint("Error loading farmers from Firestore: $e");
     }
   }
 
-  // Add a deduction to Firestore and update state
+  // Add a farmer to Firestore and update state
   Future<void> addFarmer(Farmer farmer) async {
     try {
       // Add deduction to Firestore
       final docRef = await _firestore.collection('farmers').add(farmer.toMap());
-
       // Add the deduction to the local state
-      final newSale = farmer.copyWith(id: docRef.id);
-      state = [...state, newSale];
+      final newFarmer = farmer.copyWith(id: docRef.id);
+      state = [...state, newFarmer];
     } catch (e) {
-      debugPrint("Error adding deduction: $e");
+      debugPrint("Error adding farmer: $e");
     }
   }
 
-  // Delete a deduction from Firestore and update state
+  // Delete a farmer from Firestore and update state
   Future<void> deleteFarmer(String id) async {
     try {
       // Delete deduction from Firestore
@@ -76,26 +79,26 @@ class DeductionNotifier extends StateNotifier<List<Farmer>> {
       // Remove the deduction from the local state
       state = state.where((farmer) => farmer.id != id).toList();
     } catch (e) {
-      debugPrint("Error deleting deduction: $e");
+      debugPrint("Error deleting farmer: $e");
     }
   }
 
-  // Update a deduction in Firestore and update state
+  // Update a farmer in Firestore and update state
   Future<void> updateDeduction(Farmer updatedFarmer) async {
     try {
-      // Update deduction in Firestore
+      // Update farmer in Firestore
       await _firestore
           .collection('farmers')
           .doc(updatedFarmer.id)
           .update(updatedFarmer.toMap());
 
-      // Update the deduction in the local state
+      // Update the farmer in the local state
       state = [
         for (final sale in state)
           if (sale.id == updatedFarmer.id) updatedFarmer else sale
       ];
     } catch (e) {
-      debugPrint("Error updating deduction: $e");
+      debugPrint("Error updating farmer: $e");
     }
   }
 }

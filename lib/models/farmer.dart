@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ratek/utils/date_formater.dart';
 
 class Farmer {
-  final String id;
+  final String? id;
   final String firstName;
   final String middleName;
   final String lastName;
@@ -15,16 +15,23 @@ class Farmer {
   final String dob;
   final String zone;
   final String ward;
+  final String district;
   final String village;
   final String accountNumber;
   final String bankName;
   final int farmSize;
   final int numberOfTrees;
   final int numberOfTreesWithFruits;
+  final double? entryFee;
+  final double? subscriptionFee;
+  final double? loan;
 
   Farmer({
     required this.id,
     this.corperateId,
+    this.entryFee,
+    this.subscriptionFee,
+    this.loan,
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -34,6 +41,7 @@ class Farmer {
     required this.dob,
     required this.zone,
     required this.ward,
+    required this.district,
     required this.village,
     required this.accountNumber,
     required this.bankName,
@@ -49,6 +57,9 @@ class Farmer {
         firstName: map['first_name'] ?? "",
         middleName: map['middle_name'] ?? "",
         corperateId: map['corperate_id'] ?? "",
+        entryFee: map['entry_fee'] ?? 0.0,
+        subscriptionFee: map['subscription_fee'] ?? 0.0,
+        loan: map['loan'] ?? 0.0,
         lastName: map['last_name'] ?? "",
         phone: map['phone'] ?? "",
         gender: map['gender'] ?? "",
@@ -56,6 +67,7 @@ class Farmer {
         dob: map['dob'] ?? formatDate(DateTime.now()),
         zone: map['zone'] ?? "Hasamba",
         ward: map['ward'] ?? "",
+        district: map['district'] ?? "",
         village: map['village'] ?? "",
         accountNumber: map['account_number'] ?? "",
         bankName: map['bank_name'] ?? "",
@@ -78,12 +90,22 @@ class Farmer {
         dob: map['dob'] ?? formatDate(DateTime.now()),
         zone: map['zone'] ?? "Hasamba",
         ward: map['ward'] ?? "",
+        loan: map['loan'] ?? 0.0,
+        entryFee: map['entry_fee'] ?? 0.0,
+        subscriptionFee: map['subscription_fee'] ?? 0.0,
+        district: map['district'] ?? "",
         village: map['village'] ?? "",
         accountNumber: map['account_number'] ?? "",
         bankName: map['bank_name'] ?? "",
         farmSize: map['farm_size'] ?? 0,
         numberOfTrees: map['number_of_trees'] ?? 0,
         numberOfTreesWithFruits: map['number_of_trees_with_fruits'] ?? 0);
+  }
+
+  String get formattedName {
+    // Format: First Full, Second Initial, Third Full
+    String secondInitial = middleName.isNotEmpty ? '${middleName[0]}.' : '';
+    return '$firstName $secondInitial $lastName';
   }
 
   // Convert a Farmer to a Map
@@ -99,6 +121,8 @@ class Farmer {
       'dob': dob,
       'zone': zone,
       'ward': ward,
+      "loan": loan,
+      "entry_fee": entryFee,
       'village': village,
       'account_number': accountNumber,
       'bank_name': bankName,
@@ -120,6 +144,7 @@ class Farmer {
     String? dob,
     String? zone,
     String? ward,
+    String? district,
     String? village,
     String? accountNumber,
     String? bankName,
@@ -139,6 +164,7 @@ class Farmer {
       dob: dob ?? this.dob,
       zone: zone ?? this.zone,
       ward: ward ?? this.ward,
+      district: district ?? this.district,
       village: village ?? this.village,
       accountNumber: accountNumber ?? this.accountNumber,
       bankName: bankName ?? this.bankName,

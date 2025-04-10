@@ -1,30 +1,21 @@
 {
   "project_info": {
-    "project_number": "891859102098",
-    "project_id": "agripoa-b54d1",
-    "storage_bucket": "agripoa-b54d1.appspot.com"
+    "project_number": "58649514855",
+    "project_id": "agrivsla",
+    "storage_bucket": "agrivsla.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:891859102098:android:0f8ce931eafa95c87d394b",
+        "mobilesdk_app_id": "1:58649514855:android:7e1b2a906acd37487715c2",
         "android_client_info": {
           "package_name": "com.example.ratek"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "891859102098-o0cql5o0gbl1dcibkh3780g6f85b2nvh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ratek",
-            "certificate_hash": "e2e0a5beb9891cd67b3f8884f6fbfc66b3af4076"
-          }
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB5dG2Ds0lUSbq1QEuTDRMXrzmCksqlyP0"
+          "current_key": "AIzaSyCh_ik2ZKXYxC43iW34uLlpYsWugRUGqRM"
         }
       ],
       "services": {

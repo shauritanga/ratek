@@ -28,6 +28,7 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
   String? selectedZone;
   String ward = "";
   String village = "";
+  String district = "";
   String? bankName;
   String accountNumber = "";
   String? nida;
@@ -58,6 +59,7 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
       selectedZone = farmer.zone;
       village = farmer.village;
       ward = farmer.ward;
+      district = farmer.district;
       selectedGender = farmer.gender;
       bankName = farmer.bankName;
       accountNumber = farmer.accountNumber;
@@ -296,7 +298,7 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                     _selectDate(context);
                   },
                   onSaved: (value) {
-                    dob = value;
+                    dob = formatDate(DateTime.parse(value!));
                   },
                   validator: _validateDate,
                   keyboardType: TextInputType.datetime,
@@ -320,6 +322,25 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                     return null;
                   },
                   keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16.0),
+                const Text("Wilaya"),
+                TextFormField(
+                  initialValue: district,
+                  decoration: InputDecoration(
+                    hintText: "Jaza Wilaya",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  onSaved: (value) => district = value!,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Jaza Wilaya";
+                    }
+                    return null;
+                  },
+                  keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 16),
                 const Text("Kanda"),
@@ -568,9 +589,9 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                           "phone": phoneNumber,
                           "nida": nida,
                           "dob": dob,
-                          "synced": 0,
                           "zone": selectedZone!,
                           "ward": ward,
+                          "district": district,
                           "village": village,
                           "bank_name": bankName!,
                           "account_number": accountNumber,
@@ -585,18 +606,21 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
                           await showDialog(
                             context: context,
                             builder: (context) => FutureProgressDialog(
-                              FirestoreService().addFarmer(data),
+                              FirestoreService().addFarmer(data).timeout(
+                                    Duration(seconds: 5),
+                                    onTimeout: () => true,
+                                  ),
                               message: const Text('Saving...'),
                             ),
                           );
                         } else {
                           // Edit farmer - Update Firestore record
-                          data['id'] = widget.farmerData!.id;
                           await showDialog(
                             context: context,
                             builder: (context) => FutureProgressDialog(
-                              FirestoreService().updateFarmer(data),
-                              message: const Text('Saving...'),
+                              FirestoreService()
+                                  .updateFarmer(data, widget.farmerData!.id!),
+                              message: const Text('updating...'),
                             ),
                           );
                         }
@@ -613,7 +637,6 @@ class _FarmerEntryDialogState extends State<FarmerEntryDialog> {
 
                         Navigator.pop(context);
                       } catch (e) {
-                        print(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Hujafanikiwa kusajiri"),

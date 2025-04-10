@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ratek/utils/get_id.dart';
 
 class FirestoreService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -41,11 +40,11 @@ class FirestoreService {
   }
 
   Future<void> addSale(Map<String, dynamic> sale) async {
-    final deviceId = await getDeviceId();
-    await firestore
-        .collection('sales')
-        .doc("${sale['id']}-$deviceId")
-        .set(sale);
+    await firestore.collection('sales').add(sale);
+  }
+
+  Future<void> addRejectSale(Map<String, dynamic> sale) async {
+    await firestore.collection('sales').add(sale);
   }
 
   // Get all farmers from Firestore
@@ -62,8 +61,8 @@ class FirestoreService {
   }
 
   // Update a farmer in Firestore
-  Future<void> updateFarmer(Map<String, dynamic> farmer) async {
-    await firestore.collection('farmers').doc(farmer['id']).update(farmer);
+  Future<void> updateFarmer(Map<String, dynamic> farmer, String id) async {
+    await firestore.collection('farmers').doc(id).update(farmer);
   }
 
   static Future<int> getGroupCount() async {

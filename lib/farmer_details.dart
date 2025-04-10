@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:ratek/models/farmer.dart';
 import 'package:ratek/new_farmer_entry_dialog.dart';
 
@@ -13,6 +14,14 @@ class FarmerDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    // Specify the format of the input date string
+    DateFormat format =
+        DateFormat('d/M/yyyy'); // 'd/M/yyyy' corresponds to '19/3/2024'
+
+    // Parse the string into a DateTime object
+    DateTime dateTime = format.parse(farmer.dob);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mkulima"),
@@ -179,22 +188,22 @@ class FarmerDetailsScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // const Divider(
-                    //   thickness: 0.5,
-                    //   color: Colors.grey,
-                    // ),
-                    // const SizedBox(height: 8),
-                    // Row(
-                    //   children: [
-                    //     const Icon(
-                    //       FontAwesomeIcons.clock,
-                    //       size: 18,
-                    //       color: Colors.green,
-                    //     ),
-                    //     const SizedBox(width: 24),
-                    //     Text(" Miaka ${farmer.age}")
-                    //   ],
-                    // ),
+                    const Divider(
+                      thickness: 0.5,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.clock,
+                          size: 18,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 24),
+                        Text("Miaka ${DateTime.now().year - dateTime.year}")
+                      ],
+                    ),
                   ],
                 ),
               ),

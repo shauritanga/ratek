@@ -29,13 +29,21 @@ class _FarmersScreenState extends ConsumerState<FarmersScreen> {
               return Text("No any farmer registered!");
             }
 
-            final farmers = data
-                .where(
-                  (farmer) => farmer.firstName
-                      .toLowerCase()
-                      .contains(farmerQuery.toLowerCase()),
-                )
-                .toList();
+            final farmers = data.where(
+              (farmer) {
+                final query = farmerQuery.toLowerCase();
+                final firstNameMatch =
+                    farmer.firstName.toLowerCase().contains(query);
+                final middleNameMatch =
+                    farmer.middleName.toLowerCase() != 'unknown' &&
+                        farmer.middleName.toLowerCase().contains(query);
+                final lastNameMatch =
+                    farmer.lastName.toLowerCase() != 'unknown' &&
+                        farmer.lastName.toLowerCase().contains(query);
+
+                return firstNameMatch || middleNameMatch || lastNameMatch;
+              },
+            ).toList();
             return ListView.builder(
               itemCount: farmers.length,
               itemBuilder: (context, index) {
@@ -80,7 +88,7 @@ class _FarmersScreenState extends ConsumerState<FarmersScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${farmer.firstName} ${farmer.lastName}",
+                                    "${farmer.firstName} ${farmer.lastName == "Unknown" ? farmer.middleName : farmer.lastName}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                     ),

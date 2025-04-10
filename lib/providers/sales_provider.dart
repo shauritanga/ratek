@@ -31,19 +31,9 @@ class DeductionNotifier extends StateNotifier<List<Sale>> {
     try {
       final querySnapshot = await _firestore.collection('sales').get();
       final sales = querySnapshot.docs
-          .map(
-            (doc) => Sale(
-              id: doc.id,
-              farmer: doc['farmer'],
-              weight: doc['weight'],
-              date: doc['date'],
-              receive: doc['receive'],
-              amount: doc['amount'],
-              uwamambo: doc['uwamambo'],
-              corperate: doc['corperate'],
-            ),
-          )
-          .toList();
+          .map((doc) => Sale.fromDocument(doc))
+          .toList()
+          .cast<Sale>();
       state = sales;
     } catch (e) {
       debugPrint("Error loading deductions from Firestore: $e");
@@ -51,7 +41,7 @@ class DeductionNotifier extends StateNotifier<List<Sale>> {
   }
 
   // Add a deduction to Firestore and update state
-  Future<void> addDeduction(Sale sale) async {
+  Future<void> addSale(Sale sale) async {
     try {
       // Add deduction to Firestore
       final docRef = await _firestore.collection('sales').add({
@@ -59,9 +49,9 @@ class DeductionNotifier extends StateNotifier<List<Sale>> {
         'weight': sale.weight,
         'receive': sale.receive,
         'amount': sale.amount,
+        'type': sale.type,
         'date': sale.date,
         'uwamambo': sale.uwamambo,
-        "corperate": sale.corperate
       });
 
       // Add the deduction to the local state
@@ -73,10 +63,10 @@ class DeductionNotifier extends StateNotifier<List<Sale>> {
   }
 
   // Delete a deduction from Firestore and update state
-  Future<void> deleteDeduction(String id) async {
+  Future<void> deleteSale(String id) async {
     try {
       // Delete deduction from Firestore
-      await _firestore.collection('deductions').doc(id).delete();
+      await _firestore.collection('sales').doc(id).delete();
 
       // Remove the deduction from the local state
       state = state.where((sale) => sale.id != id).toList();
@@ -86,15 +76,15 @@ class DeductionNotifier extends StateNotifier<List<Sale>> {
   }
 
   // Update a deduction in Firestore and update state
-  Future<void> updateDeduction(Sale updatedSale) async {
+  Future<void> updateSale(Sale updatedSale) async {
     try {
       // Update deduction in Firestore
       await _firestore.collection('sales').doc(updatedSale.id).update({
         'farmer': updatedSale.farmer,
         'weight': updatedSale.weight,
-        'cooperate': updatedSale.corperate,
         "amount": updatedSale.amount,
         'date': updatedSale.date,
+        'type': updatedSale.type,
         "receive": updatedSale.receive,
         "uwamambo": updatedSale.uwamambo,
       });

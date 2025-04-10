@@ -1,0 +1,2 @@
+/Users/athanasshauritanga/Desktop/Mobile/ratek/android/app/.cxx/RelWithDebInfo/4i4dd502/x86_64/CMakeFiles/edit_cache.dir
+/Users/athanasshauritanga/Desktop/Mobile/ratek/android/app/.cxx/RelWithDebInfo/4i4dd502/x86_64/CMakeFiles/rebuild_cache.dir
